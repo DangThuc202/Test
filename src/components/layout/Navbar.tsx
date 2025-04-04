@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,16 +12,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [notifications] = useState(3);
-  const [text,setText] = useState("");
+  const [text, setText] = useState("");
+  const location = useLocation();
+  const route =
+    location.pathname === "/"
+      ? "DASHBOARD"
+      : location.pathname.slice(1).toUpperCase();
+  const navigate = useNavigate();
 
   return (
-    <header className="h-16 border-b border-border flex items-center px-6 py-6">
-      <div className="flex-1">
-        <div className="relative flex max-w-md">
-          <Button onClick={() => alert(`Bạn đã nhập "${text}"`)} className="absolute ">
+    <header className="h-16 border-b border-border flex items-center justify-between px-6 py-6">
+      <div className="flex gap-4">
+        <div onClick={() => navigate(-1)} className="cursor-pointer">
+          <ArrowLeft />
+        </div>
+        <div className=" flex max-w-md">
+          <Button
+            onClick={() => alert(`Bạn đã nhập "${text}"`)}
+            className="absolute ">
             <Search className="h-4 w-4" />
           </Button>
           <Input
@@ -33,6 +44,9 @@ export default function Navbar() {
           />
         </div>
       </div>
+
+      <h4 className="font-semibold">{route}</h4>
+
       <div className="flex items-center space-x-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -41,60 +55,82 @@ export default function Navbar() {
               {notifications > 0 && (
                 <Badge
                   className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]"
-                  variant="destructive"
-                >
+                  variant="destructive">
                   {notifications}
                 </Badge>
               )}
             </Button>
           </DropdownMenuTrigger>
           <div className="relative">
-          <DropdownMenuContent align="end"className="xl:w-80 w-60 ">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <div className="max-h-80 overflow-auto">
-              <DropdownMenuItem className="cursor-pointer">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">New homework submission</p>
-                  <p className="text-xs text-muted-foreground">Emma Thompson submitted "Week 3 Assignment"</p>
-                  <p className="text-xs text-muted-foreground">10 minutes ago</p>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">Question from student</p>
-                  <p className="text-xs text-muted-foreground">Alex Wilson asked a question in "Introduction to Programming"</p>
-                  <p className="text-xs text-muted-foreground">25 minutes ago</p>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">New course enrollment</p>
-                  <p className="text-xs text-muted-foreground">3 new students enrolled in "Data Structures"</p>
-                  <p className="text-xs text-muted-foreground">1 hour ago</p>
-                </div>
-              </DropdownMenuItem>
-            </div>
-          </DropdownMenuContent>
-
+            <DropdownMenuContent align="end" className="xl:w-80 w-60 ">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="max-h-80 overflow-auto">
+                <DropdownMenuItem className="cursor-pointer">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium">
+                      New homework submission
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Emma Thompson submitted "Week 3 Assignment"
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      10 minutes ago
+                    </p>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium">Question from student</p>
+                    <p className="text-xs text-muted-foreground">
+                      Alex Wilson asked a question in "Introduction to
+                      Programming"
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      25 minutes ago
+                    </p>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium">New course enrollment</p>
+                    <p className="text-xs text-muted-foreground">
+                      3 new students enrolled in "Data Structures"
+                    </p>
+                    <p className="text-xs text-muted-foreground">1 hour ago</p>
+                  </div>
+                </DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
           </div>
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 rounded-full" size="icon">
+            <Button
+              variant="ghost"
+              className="relative h-8 rounded-full"
+              size="icon">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" />
-                <AvatarFallback className="bg-primary text-primary-foreground">JD</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  JD
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="hover:cursor-pointer">Profile</DropdownMenuItem>
-            <DropdownMenuItem className="hover:cursor-pointer">Settings</DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
+              Settings
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="hover:cursor-pointer">Logout</DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
